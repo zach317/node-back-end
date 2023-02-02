@@ -9,7 +9,7 @@ function dbConfig() {
     port: 3306,
     user: 'root',
     password: '12345678',
-    database: 'test_user',
+    database: 'node_back_end',
     connectionLimit: 1, //创建几个连接池
   }
 }
