@@ -5,8 +5,9 @@ const userController = {
   register: async (req, res) => {
     try {
       const data = await userServices.register(req.body)
-      console.log('🚀  register:  data', data)
-      res.send(sendData())
+      if (data) {
+        res.send(sendData(true))
+      }
     } catch (error) {
       console.log('🚀  register:  error', error)
     }
@@ -22,6 +23,19 @@ const userController = {
       res.send(sendData(true))
     } catch (error) {
       console.log('🚀  checkUsername:  error', error)
+    }
+  },
+  login: async (req, res) => {
+    const values = req.body
+    try {
+      const data = await userServices.login(values)
+      if (data[0].length) {
+        res.send(sendData(true))
+        return
+      }
+      res.send(sendData(false, '用户名或密码错误'))
+    } catch (error) {
+      console.log('🚀  login:  error', error)
     }
   },
 }
