@@ -1,6 +1,6 @@
 const JWT = require('../utils/JWT')
 
-const excludeUrl = ['/users/login', '/users/register']
+const excludeUrl = ['/users/login', '/users/register','/users/check-username']
 const authentication = (req, res, next) => {
   if (excludeUrl.includes(req.url)) {
     next()

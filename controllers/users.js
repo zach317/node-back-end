@@ -19,7 +19,6 @@ const userController = {
     const { username } = req.body
     try {
       const data = await userServices.checkUsername(username)
-      console.log('🚀  checkUsername:  data', data)
       if (data[0].length) {
         res.send(sendData(false, '用户名已存在'))
         return
@@ -35,24 +34,23 @@ const userController = {
     try {
       const data = await userServices.login(values)
       if (data[0].length) {
-        const { username, id, gender, birth } = data[0][0]
+        const { username, id, gender, birth, nickname } = data[0][0]
         const birthday = dayjs(birth).valueOf()
         const today = dayjs().valueOf()
         const age = Math.floor(
           parseInt((today - birthday) / 1000) / 86400 / 365
         )
-        const token = JWT.generate(
-          {
-            username,
-            id,
-            gender,
-            birth,
-            age,
-          },
-          '1h'
-        )
+        const result = {
+          username,
+          nickname,
+          id,
+          gender,
+          birth,
+          age,
+        }
+        const token = JWT.generate(result, '1h')
         res.header('Authorization', token)
-        res.send(sendData(true))
+        res.send(sendData(true, '', result))
         return
       }
       res.send(sendData(false, '用户名或密码错误'))
