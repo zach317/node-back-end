@@ -10,5 +10,7 @@ router.get('/', function (req, res, next) {
 router.post('/register', userController.register)
 router.post('/check-username',userController.checkUsername)
 router.post('/login',userController.login)
+router.post('/update-userinfo',userController.updateUserInfo)
+router.get('/get-userinfo',userController.getUserInfo)
 
 module.exports = router

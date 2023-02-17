@@ -1,19 +1,19 @@
 const JWT = require('../utils/JWT')
 
-const excludeUrl = ['/users/login', '/users/register','/users/check-username']
+const excludeUrl = ['/users/login', '/users/register', '/users/check-username']
 const authentication = (req, res, next) => {
   if (excludeUrl.includes(req.url)) {
     next()
     return
   }
-  console.log('🚀  authentication   req.headers', req.headers)
   const token = req.headers['authorization']?.split(' ')[1]
   if (token) {
     const payload = JWT.verify(token)
     if (payload) {
       // 重新计算token过期时间
-      const newToken = JWT.generate({ ...payload }, '1h')
-      res.headers('Authorization', newToken)
+      const { username, id } = payload
+      const newToken = JWT.generate({ username, id }, '1h')
+      res.header('Authorization', newToken)
       next()
       return
     }

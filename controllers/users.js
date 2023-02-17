@@ -11,7 +11,7 @@ const userController = {
         res.send(sendData(true))
       }
     } catch (error) {
-      console.log('🚀  register:  error', error)
+      res.status(500).send(sendData(false, error.message))
     }
   },
 
@@ -25,7 +25,7 @@ const userController = {
       }
       res.send(sendData(true))
     } catch (error) {
-      console.log('🚀  checkUsername:  error', error)
+      res.status(500).send(sendData(false, error.message))
     }
   },
 
@@ -34,28 +34,53 @@ const userController = {
     try {
       const data = await userServices.login(values)
       if (data[0].length) {
-        const { username, id, gender, birth, nickname } = data[0][0]
-        const birthday = dayjs(birth).valueOf()
-        const today = dayjs().valueOf()
-        const age = Math.floor(
-          parseInt((today - birthday) / 1000) / 86400 / 365
-        )
+        const { username, id } = data[0][0]
         const result = {
           username,
-          nickname,
           id,
-          gender,
-          birth,
-          age,
         }
         const token = JWT.generate(result, '1h')
         res.header('Authorization', token)
-        res.send(sendData(true, '', result))
+        res.send(sendData(true, '', id))
         return
       }
       res.send(sendData(false, '用户名或密码错误'))
     } catch (error) {
-      console.log('🚀  login:  error', error)
+      res.status(500).send(sendData(false, error.message))
+    }
+  },
+
+  updateUserInfo: async (req, res) => {
+    const values = req.body
+    try {
+      const data = await userServices.updateUserInfo(values)
+      if (data[0]) {
+        res.send(sendData(true))
+      }
+    } catch (error) {
+      res.status(500).send(sendData(false, error.message))
+    }
+  },
+
+  getUserInfo: async (req, res) => {
+    const { userId } = req.query
+    try {
+      const data = await userServices.getUserinfo(userId)
+      const { username, id, gender, birth, nickname } = data[0][0]
+      const birthday = dayjs(birth).valueOf()
+      const today = dayjs().valueOf()
+      const age = Math.floor(parseInt((today - birthday) / 1000) / 86400 / 365)
+      const result = {
+        username,
+        nickname,
+        id,
+        gender,
+        birth,
+        age,
+      }
+      res.send(sendData(true, '', result))
+    } catch (error) {
+      res.status(500).send(sendData(false, error.message))
     }
   },
 }

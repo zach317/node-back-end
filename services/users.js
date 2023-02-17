@@ -6,12 +6,22 @@ const userServices = {
     )
   },
   checkUsername: (username) => {
-    return sqlQuery(`SELECT username FROM user WHERE username ='${username}'`)
+    return sqlQuery(
+      `SELECT username FROM user WHERE username ='${username}' LIMIT 1`
+    )
   },
   login: ({ username, password }) => {
     return sqlQuery(
       `SELECT * FROM user WHERE username='${username}' AND password='${password}'`
     )
+  },
+  updateUserInfo: ({ username, nickname, gender, birth, id }) => {
+    return sqlQuery(
+      `UPDATE user SET username='${username}',nickname='${nickname}',gender='${gender}',birth='${birth}' WHERE id='${id}' `
+    )
+  },
+  getUserinfo: (userId) => {
+    return sqlQuery(`SELECT * FROM user WHERE id = '${userId}'`)
   },
 }
 
