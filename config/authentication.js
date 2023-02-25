@@ -1,4 +1,5 @@
 const JWT = require('../utils/JWT')
+const { sendData } = require('../utils/utils')
 
 const excludeUrl = ['/users/login', '/users/register', '/users/check-username']
 const authentication = (req, res, next) => {
@@ -18,7 +19,7 @@ const authentication = (req, res, next) => {
       return
     }
     // 否则token过期 则返回401
-    res.status(401).send({ message: '登录超时，请重新登陆' })
+    res.status(401).send(sendData(false, '登录超时，请重新登陆'))
     return
   }
   next()

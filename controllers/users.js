@@ -83,6 +83,16 @@ const userController = {
       res.status(500).send(sendData(false, error.message))
     }
   },
+
+  updateAvatar: async (req, res) => {
+    console.log('🚀 :', req.body)
+    try {
+      res.send({ ok: 1 })
+    } catch (error) {
+      console.log('🚀  updateAvatar:  error:', error)
+      res.status(500).send(sendData(false, error.message))
+    }
+  },
 }
 
 module.exports = userController
