@@ -23,10 +23,13 @@ const userServices = {
   getUserinfo: (userId) => {
     return sqlQuery(`SELECT * FROM user WHERE id='${userId}'`)
   },
-  updateAvatar: (file, id) => {
+  getAvatarUrl: (id) => {
     return sqlQuery(
-      `UPDATE user SET avatar='${file}' WHERE id = ${id}`
+      `SELECT avatar FROM user WHERE id='${id}' LIMIT 1`
     )
+  },
+  updateAvatar: (file, id) => {
+    return sqlQuery(`UPDATE user SET avatar='${file}' WHERE id = ${id}`)
   },
 }
 

@@ -2,6 +2,8 @@ const userServices = require('../services/users')
 const JWT = require('../utils/JWT')
 const { sendData } = require('../utils/utils')
 const dayjs = require('dayjs')
+const fs = require('fs')
+const path = require('path')
 
 const userController = {
   register: async (req, res) => {
@@ -89,9 +91,15 @@ const userController = {
     const { file } = req
     const avatarUrl = `/api/avatars/${file.filename}`
     const { id } = req.body
+    const avatarData = await userServices.getAvatarUrl(id)
+    const avatar = avatarData[0][0].avatar
+    const avatarCode = !!avatar && avatar.split('/').pop()
     try {
       const data = await userServices.updateAvatar(avatarUrl, id)
       if (data[0]) {
+        if (!!avatarCode) {
+          fs.unlink(path.resolve(__dirname, `../public/avatars/${avatarCode}`))
+        }
         res.send(sendData(true))
       }
     } catch (error) {
