@@ -66,7 +66,7 @@ const userController = {
     const { userId } = req.query
     try {
       const data = await userServices.getUserinfo(userId)
-      const { username, id, gender, birth, nickname } = data[0][0]
+      const { username, id, gender, birth, nickname, avatar } = data[0][0]
       const birthday = dayjs(birth).valueOf()
       const today = dayjs().valueOf()
       const age = Math.floor(parseInt((today - birthday) / 1000) / 86400 / 365)
@@ -77,6 +77,7 @@ const userController = {
         gender,
         birth,
         age,
+        avatar,
       }
       res.send(sendData(true, '', result))
     } catch (error) {
@@ -85,11 +86,15 @@ const userController = {
   },
 
   updateAvatar: async (req, res) => {
-    console.log('🚀 :', req.body)
+    const { file } = req
+    const avatarUrl = `/api/avatars/${file.filename}`
+    const { id } = req.body
     try {
-      res.send({ ok: 1 })
+      const data = await userServices.updateAvatar(avatarUrl, id)
+      if (data[0]) {
+        res.send(sendData(true))
+      }
     } catch (error) {
-      console.log('🚀  updateAvatar:  error:', error)
       res.status(500).send(sendData(false, error.message))
     }
   },

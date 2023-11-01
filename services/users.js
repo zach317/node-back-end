@@ -7,7 +7,7 @@ const userServices = {
   },
   checkUsername: (username) => {
     return sqlQuery(
-      `SELECT username FROM user WHERE username ='${username}' LIMIT 1`
+      `SELECT username FROM user WHERE username='${username}' LIMIT 1`
     )
   },
   login: ({ username, password }) => {
@@ -21,7 +21,12 @@ const userServices = {
     )
   },
   getUserinfo: (userId) => {
-    return sqlQuery(`SELECT * FROM user WHERE id = '${userId}'`)
+    return sqlQuery(`SELECT * FROM user WHERE id='${userId}'`)
+  },
+  updateAvatar: (file, id) => {
+    return sqlQuery(
+      `UPDATE user SET avatar='${file}' WHERE id = ${id}`
+    )
   },
 }
 

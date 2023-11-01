@@ -4,8 +4,8 @@ var router = express.Router()
 
 /* GET home page. */
 router.get('/', async function (req, res, next) {
-  const result = await sqlQuery('select * from students')
-  console.log('🚀  result', result[0])
+  // const result = await sqlQuery('select * from users')
+  // console.log('🚀  result', result[0])
   res.render('index', { title: 'Express' })
 })
 

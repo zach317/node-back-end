@@ -3,6 +3,16 @@ var router = express.Router()
 const userController = require('../controllers/users')
 const multer = require('multer')
 
+// const fileStorage = multer.diskStorage({
+//   destination: function (req, file, callback) {
+//     callback(null, 'public/avatars/')
+//   },
+//   filename: function (req, file, callback) {
+//     callback(null, file.originalname)
+//   },
+// })
+// const upload = multer({ storage: fileStorage })
+
 const upload = multer({ dest: 'public/avatars/' })
 
 /* GET users listing. */
