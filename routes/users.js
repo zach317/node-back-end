@@ -2,18 +2,18 @@ var express = require('express')
 var router = express.Router()
 const userController = require('../controllers/users')
 const multer = require('multer')
-
-// const fileStorage = multer.diskStorage({
-//   destination: function (req, file, callback) {
-//     callback(null, 'public/avatars/')
-//   },
-//   filename: function (req, file, callback) {
-//     callback(null, file.originalname)
-//   },
-// })
-// const upload = multer({ storage: fileStorage })
+const JWT = require('../utils/JWT')
 
 const upload = multer({ dest: 'public/avatars/' })
+
+const addUserToBody = (req, res, next) => {
+  const token = req.headers['authorization']?.split(' ')[1]
+  const payload = JWT.verify(token)
+  if (token) {
+    req.body.id = payload.id
+  }
+  next()
+}
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
@@ -28,6 +28,7 @@ router.get('/get-userinfo', userController.getUserInfo)
 router.post(
   '/update-avatar',
   upload.single('avatar'),
+  addUserToBody,
   userController.updateAvatar
 )
 

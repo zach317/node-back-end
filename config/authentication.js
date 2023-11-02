@@ -15,6 +15,7 @@ const authentication = (req, res, next) => {
       const { username, id } = payload
       const newToken = JWT.generate({ username, id }, '1h')
       res.header('Authorization', newToken)
+      req.body = { ...req.body, id }
       next()
       return
     }

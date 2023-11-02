@@ -4,6 +4,9 @@ const sendData = (success, message, data) => ({
   data,
 })
 
+const selectSql = (data) => data[0][0]
+
 module.exports = {
   sendData,
+  selectSql,
 }
