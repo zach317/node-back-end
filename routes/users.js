@@ -31,5 +31,9 @@ router.post(
   addUserToBody,
   userController.updateAvatar
 )
+router.get('/user-account-info', userController.getUserAccountInfo)
+router.post('/send-sms', userController.sendSms)
+router.post('/bind-phone', userController.bindPhone)
+router.post('/check-phone', userController.checkPhone)
 
 module.exports = router

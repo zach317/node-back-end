@@ -1,6 +1,11 @@
 const userServices = require('../services/users')
 const JWT = require('../utils/JWT')
-const { sendData, selectSql } = require('../utils/utils')
+const {
+  sendData,
+  selectSql,
+  randomSixDigitNumber,
+  maskPhoneNumber,
+} = require('../utils/utils')
 const dayjs = require('dayjs')
 const fs = require('fs')
 const path = require('path')
@@ -69,7 +74,7 @@ const userController = {
     const { id: userId } = req.body
     try {
       const data = await userServices.getUserinfo(userId)
-      const { username, id, gender, birth, nickname, avatar } = data[0][0]
+      const { username, id, gender, birth, nickname, avatar } = selectSql(data)
       const birthday = dayjs(birth).valueOf()
       const today = dayjs().valueOf()
       const age = Math.floor(parseInt((today - birthday) / 1000) / 86400 / 365)
@@ -109,6 +114,48 @@ const userController = {
         }
         res.send(sendData(true))
       }
+    } catch (error) {
+      res.status(500).send(sendData(false, error.message))
+    }
+  },
+
+  getUserAccountInfo: async (req, res) => {
+    const { id } = req.body
+    try {
+      const data = await userServices.getUserinfo(id)
+      const { phone, email } = selectSql(data)
+      res.send(sendData(true, '', { phone: maskPhoneNumber(phone), email }))
+    } catch (error) {
+      res.status(500).send(sendData(false, error.message))
+    }
+  },
+
+  sendSms: async (req, res) => {
+    const { phone, email } = req.body
+    res.send(sendData(true, phone || email, { code: randomSixDigitNumber() }))
+  },
+
+  bindPhone: async (req, res) => {
+    const { phone, id } = req.body
+    try {
+      const data = await userServices.bindPhone(phone, id)
+      if (data[0]) {
+        res.send(sendData(true))
+      }
+    } catch (error) {
+      res.status(500).send(sendData(false, error.message))
+    }
+  },
+  checkPhone: async (req, res) => {
+    const { phone, id } = req.body
+    try {
+      const result = await userServices.checkPhone(id)
+      const data = selectSql(result)
+      if (data.phone === phone) {
+        res.send(sendData(true))
+        return
+      }
+      res.send(sendData(false, '输入手机号与绑定手机号不一致'))
     } catch (error) {
       res.status(500).send(sendData(false, error.message))
     }

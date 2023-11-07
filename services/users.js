@@ -24,12 +24,16 @@ const userServices = {
     return sqlQuery(`SELECT * FROM user WHERE id='${userId}'`)
   },
   getAvatarUrl: (id) => {
-    return sqlQuery(
-      `SELECT avatar FROM user WHERE id='${id}' LIMIT 1`
-    )
+    return sqlQuery(`SELECT avatar FROM user WHERE id='${id}' LIMIT 1`)
   },
   updateAvatar: (file, id) => {
     return sqlQuery(`UPDATE user SET avatar='${file}' WHERE id = ${id}`)
+  },
+  bindPhone: (phone, id) => {
+    return sqlQuery(`UPDATE user SET phone='${phone}' WHERE id = ${id}`)
+  },
+  checkPhone: (id) => {
+    return sqlQuery(`SELECT phone FROM user WHERE id='${id}' LIMIT 1`)
   },
 }
 
