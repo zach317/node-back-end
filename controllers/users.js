@@ -135,10 +135,11 @@ const userController = {
     res.send(sendData(true, phone || email, { code: randomSixDigitNumber() }))
   },
 
-  bindPhone: async (req, res) => {
-    const { phone, id } = req.body
+  bindAccount: async (req, res) => {
+    const { phone, email, id } = req.body
+    const type = phone ? 'phone' : 'email'
     try {
-      const data = await userServices.bindPhone(phone, id)
+      const data = await userServices.bindAccount(phone || email, type, id)
       if (data[0]) {
         res.send(sendData(true))
       }
@@ -146,16 +147,18 @@ const userController = {
       res.status(500).send(sendData(false, error.message))
     }
   },
-  checkPhone: async (req, res) => {
-    const { phone, id } = req.body
+  checkBind: async (req, res) => {
+    const { phone, email, id } = req.body
+    const dataType = phone ? 'phone' : 'email'
+    const type = phone ? '手机号' : '邮箱'
     try {
-      const result = await userServices.checkPhone(id)
+      const result = await userServices.checkBind(dataType, id)
       const data = selectSql(result)
-      if (data.phone === phone) {
+      if (data[dataType] === (phone || email)) {
         res.send(sendData(true))
         return
       }
-      res.send(sendData(false, '输入手机号与绑定手机号不一致'))
+      res.send(sendData(false, `输入${type}与绑定${type}不一致`))
     } catch (error) {
       res.status(500).send(sendData(false, error.message))
     }

@@ -29,11 +29,11 @@ const userServices = {
   updateAvatar: (file, id) => {
     return sqlQuery(`UPDATE user SET avatar='${file}' WHERE id = ${id}`)
   },
-  bindPhone: (phone, id) => {
-    return sqlQuery(`UPDATE user SET phone='${phone}' WHERE id = ${id}`)
+  bindAccount: (data, type, id) => {
+    return sqlQuery(`UPDATE user SET ${type}='${data}' WHERE id = ${id}`)
   },
-  checkPhone: (id) => {
-    return sqlQuery(`SELECT phone FROM user WHERE id='${id}' LIMIT 1`)
+  checkBind: (type, id) => {
+    return sqlQuery(`SELECT ${type} FROM user WHERE id='${id}' LIMIT 1`)
   },
 }
 

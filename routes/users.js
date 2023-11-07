@@ -33,7 +33,7 @@ router.post(
 )
 router.get('/user-account-info', userController.getUserAccountInfo)
 router.post('/send-sms', userController.sendSms)
-router.post('/bind-phone', userController.bindPhone)
-router.post('/check-phone', userController.checkPhone)
+router.post('/bind-account', userController.bindAccount)
+router.post('/check-bind', userController.checkBind)
 
 module.exports = router
