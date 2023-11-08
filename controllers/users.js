@@ -5,6 +5,7 @@ const {
   selectSql,
   randomSixDigitNumber,
   maskPhoneNumber,
+  maskEmail,
 } = require('../utils/utils')
 const dayjs = require('dayjs')
 const fs = require('fs')
@@ -124,7 +125,12 @@ const userController = {
     try {
       const data = await userServices.getUserinfo(id)
       const { phone, email } = selectSql(data)
-      res.send(sendData(true, '', { phone: maskPhoneNumber(phone), email }))
+      res.send(
+        sendData(true, '', {
+          phone: maskPhoneNumber(phone),
+          email: maskEmail(email),
+        })
+      )
     } catch (error) {
       res.status(500).send(sendData(false, error.message))
     }

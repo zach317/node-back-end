@@ -24,9 +24,23 @@ const maskPhoneNumber = (phoneNumber) => {
   }
 }
 
+const maskEmail = (email) => {
+  const atIndex = email.indexOf('@') // 找到@符号的位置
+  if (atIndex > 0) {
+    const username = email.substring(0, atIndex)
+    const domain = email.substring(atIndex)
+    const maskedUsername = username.substring(0, 3) + '****' // 保留前三位字符，其余用*替代
+    return maskedUsername + domain
+  } else {
+    // 处理无效的邮箱地址
+    return email
+  }
+}
+
 module.exports = {
   sendData,
   selectSql,
   randomSixDigitNumber,
   maskPhoneNumber,
+  maskEmail,
 }
