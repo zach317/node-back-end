@@ -105,7 +105,6 @@ const userController = {
       const data = await userServices.updateAvatar(avatarUrl, id)
       if (data[0]) {
         if (!!avatarCode) {
-          console.log('🚀  updateAvatar:  avatarCode:', avatarCode)
           fs.unlink(
             path.resolve(__dirname, `../public/avatars/${avatarCode}`),
             (err) => {
@@ -153,6 +152,7 @@ const userController = {
       res.status(500).send(sendData(false, error.message))
     }
   },
+
   checkBind: async (req, res) => {
     const { phone, email, id } = req.body
     const dataType = phone ? 'phone' : 'email'
@@ -165,6 +165,33 @@ const userController = {
         return
       }
       res.send(sendData(false, `输入${type}与绑定${type}不一致`))
+    } catch (error) {
+      res.status(500).send(sendData(false, error.message))
+    }
+  },
+
+  checkPassword: async (req, res) => {
+    const { oldPassword, id } = req.body
+    try {
+      const result = await userServices.checkPassword(id)
+      const data = selectSql(result)
+      if ((data.password = oldPassword)) {
+        res.send(sendData(true))
+        return
+      }
+      res.send(sendData(false, '原密码错误'))
+    } catch (error) {
+      res.status(500).send(sendData(false, error.message))
+    }
+  },
+
+  changePassword: async (req, res) => {
+    const { password, id } = req.body
+    try {
+      const data = await userServices.changePassword(password, id)
+      if (data[0]) {
+        res.send(sendData(true))
+      }
     } catch (error) {
       res.status(500).send(sendData(false, error.message))
     }

@@ -35,5 +35,7 @@ router.get('/user-account-info', userController.getUserAccountInfo)
 router.post('/send-sms', userController.sendSms)
 router.post('/bind-account', userController.bindAccount)
 router.post('/check-bind', userController.checkBind)
+router.post('/check-password', userController.checkPassword)
+router.post('/change-password', userController.changePassword)
 
 module.exports = router

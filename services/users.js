@@ -35,6 +35,12 @@ const userServices = {
   checkBind: (type, id) => {
     return sqlQuery(`SELECT ${type} FROM user WHERE id='${id}' LIMIT 1`)
   },
+  checkPassword: (id) => {
+    return sqlQuery(`SELECT password FROM user WHERE id='${id}' LIMIT 1`)
+  },
+  changePassword: (password, id) => {
+    return sqlQuery(`UPDATE user SET password='${password}' WHERE id = ${id}`)
+  },
 }
 
 module.exports = userServices
